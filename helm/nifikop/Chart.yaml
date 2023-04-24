@@ -4,7 +4,7 @@ name: nifikop
 home: https://github.com/konpyutaika/nifikop
 sources:
   - https://github.com/konpyutaika/nifikop
-version: 1.0.0
+version: 1.0.0-calleido1
 appVersion: 1.0.0-release
 icon:
 maintainers:

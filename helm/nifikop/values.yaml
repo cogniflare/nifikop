@@ -60,3 +60,9 @@ certManager:
 
 webhook:
   enabled: true
+
+sidecars: []
+
+extraVolumes: []
+
+extraDeploy: []

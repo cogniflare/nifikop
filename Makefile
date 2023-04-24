@@ -224,14 +224,17 @@ bundle-build:
 helm-package:
 	@echo Packaging $(CHART_VERSION)
 ifdef CHART_VERSION
-	    echo $(CHART_VERSION)
-	    helm package --version $(CHART_VERSION) helm/nifikop
-else
-		CHART_VERSION=$(HELM_VERSION)
-	    helm package helm/nifikop
+	echo $(CHART_VERSION)
+	HELM_VERSION=$(CHART_VERSION)
 endif
-	mv nifikop-$(CHART_VERSION).tgz $(HELM_TARGET_DIR)
+	helm package --version $(HELM_VERSION) helm/nifikop
+	mv nifikop-$(HELM_VERSION).tgz $(HELM_TARGET_DIR)
 	helm repo index $(HELM_TARGET_DIR)/
+
+.PHONY: helm-push
+helm-push:
+	gcloud auth print-access-token | helm registry login -u oauth2accesstoken --password-stdin https://europe-west2-docker.pkg.dev
+	helm push $(HELM_TARGET_DIR)/nifikop-$(HELM_VERSION).tgz oci://europe-west2-docker.pkg.dev/prj-cogniflare-marketpl-public/helm-charts
 
 # Push the docker image
 .PHONY: docker-push

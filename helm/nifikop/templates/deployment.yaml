@@ -49,12 +49,15 @@ spec:
       {{- end }}
       {{- if .Values.rbacEnable }}
       {{- if and .Values.serviceAccount .Values.serviceAccount.name }}
-      serviceAccountName: {{ .Values.serviceAccount.name }}      
+      serviceAccountName: {{ .Values.serviceAccount.name }}
       {{- else }}
       serviceAccountName: {{ template "nifikop.name" . }}
       {{- end }}
       {{- end }}
       volumes:
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
         {{- if .Values.vaultSecret }}
         - name: {{ .Values.vaultSecret }}
           secret:
@@ -82,6 +85,9 @@ spec:
       {{- end }}
       {{- end }}
       containers:
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
         - command:
             - /manager
           args:
